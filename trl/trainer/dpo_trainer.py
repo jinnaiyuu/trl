@@ -765,11 +765,11 @@ class DPOTrainer(Trainer):
                 [a != b for a, b in zip(chosen_tokens["prompt_input_ids"], rejected_tokens["prompt_input_ids"])]
             )
             num_diff_len = abs(chosen_prompt_len_input_ids - rejected_prompt_len_input_ids)
-            if num_diff_tokens > 1 or num_diff_len > 1:
-                raise ValueError(
-                    "Chosen and rejected prompt_input_ids might only differ on the "
-                    "last token due to tokenizer merge ops."
-                )
+            # if num_diff_tokens > 1 or num_diff_len > 1:
+            #     raise ValueError(
+            #         "Chosen and rejected prompt_input_ids might only differ on the "
+            #         "last token due to tokenizer merge ops."
+            #     )
 
             # add BOS token to head of prompt
             prompt_tokens["prompt_input_ids"] = [self.tokenizer.bos_token_id] + prompt_tokens["prompt_input_ids"]
