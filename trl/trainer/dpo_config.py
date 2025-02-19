@@ -78,7 +78,7 @@ class DPOConfig(TrainingArguments):
     beta: float = 0.1
     label_smoothing: float = 0
     loss_type: Literal[
-        "sigmoid", "hinge", "ipo", "kto_pair", "bco_pair", "sppo_hard", "nca_pair", "robust"
+        "sigmoid", "hinge", "ipo", "kto_pair", "bco_pair", "sppo_hard", "nca_pair", "robust", "fairdpo",
     ] = "sigmoid"
     label_pad_token_id: int = -100
     padding_value: int = 0
