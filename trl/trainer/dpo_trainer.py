@@ -1015,7 +1015,7 @@ class DPOTrainer(Trainer):
                 - F.logsigmoid(-self.beta * logits) * self.label_smoothing
             )
         elif self.loss_type == "fairdpo":
-            abs_logits = F.huber_loss(logits, torch.zeros_like(logits), reduction=None)
+            abs_logits = F.huber_loss(logits, torch.zeros_like(logits), reduction='none')
             losses = (
                 -F.logsigmoid(self.beta * abs_logits) * (1 - self.label_smoothing)
                 - F.logsigmoid(-self.beta * abs_logits) * self.label_smoothing
