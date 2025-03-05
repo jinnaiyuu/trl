@@ -1028,6 +1028,13 @@ class DPOTrainer(Trainer):
                 -F.logsigmoid(sum_logits) * (1 - self.label_smoothing)
                 - F.logsigmoid(-sum_logits) * self.label_smoothing
             )
+        elif self.loss_type == "fairdpot":
+            abs_pi_logratios = F.huber_loss(pi_logratios, torch.zeros_like(pi_logratios), reduction='none')
+            abs_logits = F.huber_loss(logits, torch.zeros_like(logits), reduction='none')
+            losses = (
+                abs_pi_logratios - F.logsigmoid(self.beta * abs_logits) * (1 - self.label_smoothing)
+                - F.logsigmoid(-self.beta * abs_logits) * self.label_smoothing
+            )            
         elif self.loss_type == "robust":
             losses = (
                 -F.logsigmoid(self.beta * logits) * (1 - self.label_smoothing)
