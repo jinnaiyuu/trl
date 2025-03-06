@@ -135,7 +135,7 @@ class DPOTrainer(Trainer):
         ref_model: Optional[Union[PreTrainedModel, nn.Module, str]] = None,
         beta: float = 0.1,
         label_smoothing: float = 0,
-        loss_type: Literal["sigmoid", "hinge", "ipo", "kto_pair", "bco_pair", "robust", "fairdpo", "fairdpos", "fairdpot", "fairdpof"] = "sigmoid",
+        loss_type: Literal["sigmoid", "hinge", "ipo", "kto_pair", "bco_pair", "robust", "fairdpo", "fairdpos", "fairdpot", "fairdpof", "fairdpog"] = "sigmoid",
         args: Optional[DPOConfig] = None,
         data_collator: Optional[DataCollator] = None,
         label_pad_token_id: int = -100,
@@ -1041,7 +1041,13 @@ class DPOTrainer(Trainer):
             losses = (
                 F.logsigmoid(self.beta * abs_pi_logratios) - F.logsigmoid(self.beta * abs_logits) * (1 - self.label_smoothing)
                 - F.logsigmoid(-self.beta * abs_logits) * self.label_smoothing
-            )            
+            )
+        elif self.loss_type == "fairdpog":
+            abs_logits = F.huber_loss(logits, torch.zeros_like(logits), reduction='none')
+            losses = (
+                F.logsigmoid(self.beta * abs_logits) * (1 - self.label_smoothing)
+                + F.logsigmoid(-self.beta * abs_logits) * self.label_smoothing
+            )   
         elif self.loss_type == "robust":
             losses = (
                 -F.logsigmoid(self.beta * logits) * (1 - self.label_smoothing)
