@@ -1047,7 +1047,13 @@ class DPOTrainer(Trainer):
             losses = (
                 F.logsigmoid(self.beta * abs_logits) * (1 - self.label_smoothing)
                 + F.logsigmoid(-self.beta * abs_logits) * self.label_smoothing
-            )   
+            )
+        elif self.loss_type == "softmaxdpo":
+            softmaxin = -torch.log(sum(torch.exp(self.beta * logits) + torch.exp(-self.beta * logits)))
+            losses = (
+                -F.logsigmoid(softmaxin) * (1 - self.label_smoothing)
+                - F.logsigmoid(-softmaxin) * self.label_smoothing
+            )
         elif self.loss_type == "robust":
             losses = (
                 -F.logsigmoid(self.beta * logits) * (1 - self.label_smoothing)
