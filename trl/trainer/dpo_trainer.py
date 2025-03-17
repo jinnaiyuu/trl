@@ -135,7 +135,7 @@ class DPOTrainer(Trainer):
         ref_model: Optional[Union[PreTrainedModel, nn.Module, str]] = None,
         beta: float = 0.1,
         label_smoothing: float = 0,
-        loss_type: Literal["sigmoid", "hinge", "ipo", "kto_pair", "bco_pair", "robust", "fairdpo", "fairdpos", "fairdpot", "fairdpof", "fairdpog"] = "sigmoid",
+        loss_type: Literal["sigmoid", "hinge", "ipo", "kto_pair", "bco_pair", "robust", "fairdpo", "fairdpos", "fairdpot", "fairdpof", "fairdpog", "softmaxdpo"] = "sigmoid",
         args: Optional[DPOConfig] = None,
         data_collator: Optional[DataCollator] = None,
         label_pad_token_id: int = -100,
